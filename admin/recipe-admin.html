@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recipe Book Admin</title>
+  <style>
+    :root {
+      --bg: #f5f3f7; --panel: #fff; --ink: #2f2935; --muted: #766f7a;
+      --line: #ded8e2; --gold: #a98639; --purple: #7650a7; --purple-soft: #f2edf8;
+      --danger: #a34450; --ok: #3f7757; --radius: 12px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; color: var(--ink); background: var(--bg); font-size: 14px; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: 250px minmax(640px, 1fr) 330px; }
+    .sidebar, .preview { position: sticky; top: 0; height: 100vh; overflow: auto; background: var(--panel); }
+    .sidebar { border-right: 1px solid var(--line); padding: 18px; }
+    .preview { border-left: 1px solid var(--line); padding: 18px; }
+    .main { min-width: 0; padding: 22px; }
+    h1, h2, h3 { margin-top: 0; }
+    .brand { font-family: Georgia, serif; font-size: 1.35rem; font-weight: 500; }
+    .brand span { color: var(--gold); }
+    .hint { color: var(--muted); font-size: .82rem; line-height: 1.45; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+    .btn { min-height: 34px; padding: 7px 11px; color: var(--ink); border: 1px solid var(--line); border-radius: 999px; background: #fff; }
+    .btn.primary { color: #fff; border-color: var(--purple); background: var(--purple); }
+    .btn.gold { color: #fff; border-color: var(--gold); background: var(--gold); }
+    .btn.danger { color: var(--danger); }
+    .btn.small { min-height: 28px; padding: 4px 9px; font-size: .78rem; }
+    .file-input { display: none; }
+    .nav-heading { margin: 22px 0 8px; color: var(--gold); text-transform: uppercase; letter-spacing: .08em; font-size: .68rem; font-weight: 800; }
+    .recipe-nav, .category-nav, .category-list { display: grid; gap: 5px; }
+    .nav-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 5px; }
+    .nav-button { width: 100%; padding: 9px 10px; text-align: left; color: var(--ink); border: 1px solid transparent; border-radius: 9px; background: transparent; }
+    .nav-button:hover, .nav-button.active { border-color: var(--line); background: var(--purple-soft); }
+    .star { color: var(--gold); }
+    .panel { padding: 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); }
+    .panel + .panel { margin-top: 14px; }
+    .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .panel-heading h2, .panel-heading h3 { margin: 0; }
+    .field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .field { display: grid; gap: 5px; }
+    .field.full { grid-column: 1 / -1; }
+    label { color: var(--muted); font-size: .76rem; font-weight: 700; }
+    input, textarea, select { width: 100%; padding: 9px 10px; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    textarea { min-height: 90px; resize: vertical; line-height: 1.5; }
+    input:focus, textarea:focus, select:focus { outline: 2px solid rgba(118,80,167,.18); border-color: var(--purple); }
+    .check-row { display: flex; align-items: center; gap: 8px; }
+    .check-row input { width: auto; accent-color: var(--purple); }
+    .steps { display: grid; gap: 12px; }
+    .step-card { padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+    .step-top { display: grid; grid-template-columns: 32px 1fr auto; gap: 10px; align-items: start; }
+    .step-number { display: grid; place-items: center; width: 30px; height: 30px; color: var(--gold); border: 1px solid var(--gold); border-radius: 999px; font-weight: 800; }
+    .step-actions { display: flex; gap: 4px; }
+    .ingredients-editor { margin: 12px 0 0 42px; padding-top: 12px; border-top: 1px solid var(--line); }
+    .ingredients-editor h4 { margin: 0 0 8px; color: var(--gold); font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; }
+    .ingredient-row { display: grid; grid-template-columns: 80px 85px 1fr 1fr auto; gap: 6px; margin-bottom: 6px; }
+    .ingredient-row input { min-width: 0; padding: 7px 8px; }
+    .preview h2 { font-family: Georgia, serif; font-weight: 500; }
+    .preview-image-wrap { margin: 0 0 20px; }
+    .preview-image { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+    .preview-image.is-missing { display: none; }
+    .preview-image-placeholder { display: grid; place-items: center; width: 100%; aspect-ratio: 4 / 3; padding: 20px; color: var(--muted); text-align: center; border: 1px dashed var(--line); border-radius: 10px; background: var(--bg); }
+    .image-type-field {
+      margin-top: 12px;
+    }
+    
+    .image-type-field select {
+      width: 100%;
+    }
+    .bottom-step-action { display: flex; justify-content: center; padding-top: 14px; }
+    .preview-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+    .preview-list li { display: grid; grid-template-columns: 90px 1fr; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+    .preview-amount { color: var(--purple); font-weight: 800; }
+    .preview-note { color: var(--muted); font-size: .78rem; }
+    .empty { display: grid; place-items: center; min-height: calc(100vh - 44px); text-align: center; color: var(--muted); }
+    .status { margin-top: 10px; color: var(--muted); font-size: .78rem; }
+    .status.ok { color: var(--ok); }
+    .status.bad { color: var(--danger); }
+    .category-edit-row { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+    @media (max-width: 1100px) { .app { grid-template-columns: 220px 1fr; } .preview { position: static; grid-column: 2; width: auto; height: auto; border-left: 0; border-top: 1px solid var(--line); } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><span>✦</span> Recipe Admin</div>
+      <div class="toolbar">
+        <button id="exportButton" class="btn gold" type="button">Export data</button>
+      </div>
+      <p class="hint">Recipe data loads automatically from <strong>../data/recipes-data.js</strong>. Export its replacement when finished.</p>
+      <div id="status" class="status"></div>
+
+      <button id="manageCategoriesButton" class="btn primary" type="button">Manage Categories</button>
+
+      <div class="nav-heading">Categories</div>
+      <div id="categoryNav" class="category-nav"></div>
+
+      <div class="nav-heading">Recipes</div>
+      <button id="addRecipeButton" class="btn small" type="button">+ Add recipe</button>
+      <div id="recipeNav" class="recipe-nav"></div>
+    </aside>
+
+    <main id="main" class="main"></main>
+
+    <aside class="preview">
+      <div id="imagePreviewWrap" class="preview-image-wrap"></div>
+      <h2>Ingredients preview</h2>
+      <p class="hint">Built automatically from the ingredient rows inside every step.</p>
+      <ul id="ingredientsPreview" class="preview-list"></ul>
+    </aside>
+  </div>
+
+  <script src="../data/recipes-data.js"></script>
+  <script>
+    "use strict";
+
+    const state = {
+      data: {
+        settings: { siteTitle: "Our Recipe Book", subtitle: "Favourite recipes for home", updated: "" },
+        categories: [],
+        recipes: []
+      },
+      selectedRecipeId: null,
+      selectedCategoryId: null,
+      view: "recipe"
+    };
+
+    const main = document.getElementById("main");
+    const recipeNav = document.getElementById("recipeNav");
+    const categoryNav = document.getElementById("categoryNav");
+    const ingredientsPreview = document.getElementById("ingredientsPreview");
+    const imagePreviewWrap = document.getElementById("imagePreviewWrap");
+    const status = document.getElementById("status");
+
+    document.getElementById("exportButton").addEventListener("click", exportData);
+    document.getElementById("addRecipeButton").addEventListener("click", addRecipe);
+    document.getElementById("manageCategoriesButton").addEventListener("click", () => {
+      state.view = "categories";
+      state.selectedCategoryId = null;
+      state.selectedRecipeId = null;
+      renderAll();
+    });
+    document.addEventListener("keydown", event => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "s") {
+        event.preventDefault();
+        exportData();
+      }
+    });
+
+    function uid(prefix) {
+      return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+    }
+
+    function slugify(value) {
+      return String(value || "")
+        .normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    }
+
+    function normaliseData(input) {
+      const data = input && typeof input === "object" ? input : {};
+      data.settings ||= { siteTitle: "Our Recipe Book", subtitle: "Favourite recipes for home", updated: "" };
+      data.categories = Array.isArray(data.categories) ? data.categories : [];
+      data.recipes = Array.isArray(data.recipes) ? data.recipes : [];
+      data.categories.forEach(category => { category.id ||= slugify(category.name) || uid("category"); category.name ||= "Untitled category"; });
+      data.recipes.forEach(recipe => {
+        recipe.id ||= slugify(recipe.name) || uid("recipe");
+        recipe.name ||= "Untitled recipe";
+        recipe.categoryId ||= data.categories[0]?.id || "";
+        recipe.favourite = Boolean(recipe.favourite);
+        recipe.steps = Array.isArray(recipe.steps) ? recipe.steps : [];
+        recipe.steps.forEach(step => {
+          step.id ||= uid("step");
+          step.instruction ||= "";
+          step.ingredients = Array.isArray(step.ingredients) ? step.ingredients : [];
+          step.ingredients.forEach(item => {
+            item.id ||= uid("ingredient");
+            item.quantity = Number(item.quantity) || 0;
+            item.unit ||= ""; item.name ||= ""; item.note ||= "";
+          });
+        });
+      });
+      return data;
+    }
+
+
+    function exportData() {
+      state.data.settings.updated = new Date().toISOString().slice(0, 10);
+      const output = `window.RECIPE_BOOK_DATA = ${JSON.stringify(state.data, null, 2)};\n`;
+      const blob = new Blob([output], { type: "text/javascript;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "recipes-data.js";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      setStatus("Exported recipes-data.js. Replace the file in the data folder.", true);
+    }
+
+    function addRecipe() {
+      const recipe = {
+        id: uid("recipe"),
+        name: "New Recipe",
+        categoryId:
+          state.selectedCategoryId || state.data.categories[0]?.id || "",
+        favourite: false,
+        imageType: "png",
+        description: "",
+        baseYield: "",
+        prepTime: "",
+        cookTime: "",
+        notes: "",
+        steps: [],
+      };
+    
+      state.data.recipes.push(recipe);
+      state.selectedRecipeId = recipe.id;
+      state.selectedCategoryId = recipe.categoryId || state.selectedCategoryId;
+      state.view = "recipe";
+      renderAll();
+    }
+
+    function deleteRecipe(recipeId) {
+      if (!confirm("Delete this recipe?")) return;
+      state.data.recipes = state.data.recipes.filter(recipe => recipe.id !== recipeId);
+      state.selectedRecipeId = state.data.recipes[0]?.id || null;
+      renderAll();
+    }
+
+    function addCategory() {
+      const category = { id: uid("category"), name: "New Category" };
+      state.data.categories.push(category);
+      state.view = "categories";
+      renderAll();
+    }
+
+    function deleteCategory(categoryId) {
+      if (state.data.recipes.some(recipe => recipe.categoryId === categoryId)) {
+        alert("Move recipes out of this category before deleting it.");
+        return;
+      }
+      state.data.categories = state.data.categories.filter(category => category.id !== categoryId);
+      renderAll();
+    }
+
+    function getRecipe() {
+      return state.data.recipes.find(recipe => recipe.id === state.selectedRecipeId) || null;
+    }
+
+    function renderAll() {
+      const previewPane = document.querySelector(".preview");
+    
+      if (previewPane) {
+        previewPane.style.display = state.view === "categories" ? "none" : "";
+      }
+    
+      renderCategoryNav();
+      renderRecipeNav();
+      renderEditor();
+      renderIngredientsPreview();
+      renderImagePreview();
+    }
+
+    function renderRecipeNav() {
+      recipeNav.innerHTML = "";
+      const visibleRecipes = state.selectedCategoryId
+        ? state.data.recipes.filter(recipe => recipe.categoryId === state.selectedCategoryId)
+        : state.data.recipes;
+      [...visibleRecipes].sort((a, b) => a.name.localeCompare(b.name)).forEach(recipe => {
+        const row = document.createElement("div"); row.className = "nav-row";
+        const button = document.createElement("button");
+        button.className = `nav-button${recipe.id === state.selectedRecipeId ? " active" : ""}`;
+        button.type = "button";
+        button.innerHTML = `${recipe.favourite ? '<span class="star">★</span> ' : ""}${escapeHtml(recipe.name)}`;
+        button.addEventListener("click", () => { state.selectedRecipeId = recipe.id; state.view = "recipe"; renderAll(); });
+        const remove = document.createElement("button");
+        remove.className = "btn small danger"; remove.type = "button"; remove.textContent = "×";
+        remove.addEventListener("click", () => deleteRecipe(recipe.id));
+        row.append(button, remove); recipeNav.appendChild(row);
+      });
+    }
+
+    function renderCategoryNav() {
+      categoryNav.innerHTML = "";
+    
+      state.data.categories.forEach(category => {
+        const recipeCount = state.data.recipes.filter(
+          recipe => recipe.categoryId === category.id
+        ).length;
+    
+        const button = document.createElement("button");
+        button.className =
+          `nav-button${category.id === state.selectedCategoryId ? " active" : ""}`;
+        button.type = "button";
+        button.textContent = `${category.name} (${recipeCount})`;
+    
+        button.addEventListener("click", () => {
+          state.selectedCategoryId = category.id;
+    
+          const firstRecipe = state.data.recipes
+            .filter(recipe => recipe.categoryId === category.id)
+            .sort((a, b) => a.name.localeCompare(b.name))[0];
+    
+          state.selectedRecipeId = firstRecipe?.id || null;
+          state.view = "recipe";
+          renderAll();
+        });
+    
+        categoryNav.appendChild(button);
+      });
+    }
+
+    function renderCategoryManager() {
+      main.innerHTML = `
+        <section class="panel">
+          <div class="panel-heading"><h2>Manage Categories</h2><button id="addCategoryButton" class="btn primary" type="button">+ Add category</button></div>
+          <p class="hint">Category buttons appear in this order in the admin menu and on the recipe website.</p>
+          <div id="categoryList" class="category-list"></div>
+        </section>`;
+      document.getElementById("addCategoryButton").addEventListener("click", addCategory);
+      const categoryList = document.getElementById("categoryList");
+      state.data.categories.forEach(category => {
+        const row = document.createElement("div"); row.className = "category-edit-row";
+        const input = document.createElement("input"); input.value = category.name;
+        input.addEventListener("input", () => { category.name = input.value; renderCategoryNav(); renderEditorCategoryOptions(); });
+        const remove = document.createElement("button"); remove.className = "btn small danger"; remove.type = "button"; remove.textContent = "×";
+        remove.addEventListener("click", () => deleteCategory(category.id));
+        row.append(input, remove); categoryList.appendChild(row);
+      });
+    }
+
+    function renderEditor() {
+      if (state.view === "categories") {
+        renderCategoryManager();
+        return;
+      }
+    
+      const recipe = getRecipe();
+    
+      if (!recipe) {
+        main.innerHTML =
+          '<div class="empty"><div><h2>No recipe selected</h2><p>Select a category, then add or choose a recipe.</p></div></div>';
+        return;
+      }
+    
+      recipe.imageType = recipe.imageType || "png";
+    
+      main.innerHTML = `
+        <section class="panel">
+          <div class="panel-heading">
+            <h2>Recipe details</h2>
+            <span class="hint">
+              Image: ../assets/<strong id="imageFilename"></strong>.<strong id="imageExtension"></strong>
+            </span>
+          </div>
+    
+          <div class="field-grid">
+            <div class="field full">
+              <label for="recipeName">Recipe name</label>
+              <input id="recipeName">
+            </div>
+    
+            <div class="field">
+              <label for="recipeCategory">Category</label>
+              <select id="recipeCategory"></select>
+            </div>
+    
+            <div class="field">
+              <label>Favourite</label>
+              <label class="check-row">
+                <input id="recipeFavourite" type="checkbox">
+                Show on home page
+              </label>
+            </div>
+    
+            <div class="field full">
+              <label for="recipeDescription">Description</label>
+              <textarea id="recipeDescription"></textarea>
+            </div>
+    
+            <div class="field">
+              <label for="baseYield">Base yield</label>
+              <input id="baseYield" placeholder="Serves 4 or 1 batch">
+            </div>
+    
+            <div class="field">
+              <label for="prepTime">Preparation time</label>
+              <input id="prepTime" placeholder="15 mins">
+            </div>
+    
+            <div class="field">
+              <label for="cookTime">Cooking time</label>
+              <input id="cookTime" placeholder="30 mins">
+            </div>
+    
+            <div class="field full">
+              <label for="recipeNotes">Notes</label>
+              <textarea id="recipeNotes"></textarea>
+            </div>
+          </div>
+        </section>
+    
+        <section class="panel">
+          <div class="panel-heading">
+            <h2>Method and ingredients</h2>
+            <button id="addStepButton" class="btn primary" type="button">
+              + Add step
+            </button>
+          </div>
+    
+          <p class="hint">
+            Add each ingredient to the step where it is used. The website will
+            merge matching ingredient entries into one shopping-style list.
+          </p>
+    
+          <div id="stepsEditor" class="steps"></div>
+    
+          <div class="bottom-step-action">
+            <button id="addStepBottomButton" class="btn primary" type="button">
+              + Add step
+            </button>
+          </div>
+        </section>
+      `;
+    
+      bindValue("recipeName", recipe, "name", value => {
+        document.getElementById("imageFilename").textContent = slugify(value);
+        renderRecipeNav();
+        renderImagePreview();
+      });
+    
+      bindValue("recipeDescription", recipe, "description");
+      bindValue("baseYield", recipe, "baseYield");
+      bindValue("prepTime", recipe, "prepTime");
+      bindValue("cookTime", recipe, "cookTime");
+      bindValue("recipeNotes", recipe, "notes");
+    
+      document.getElementById("imageFilename").textContent = slugify(recipe.name);
+      document.getElementById("imageExtension").textContent = recipe.imageType;
+    
+      const favourite = document.getElementById("recipeFavourite");
+      favourite.checked = recipe.favourite;
+    
+      favourite.addEventListener("change", () => {
+        recipe.favourite = favourite.checked;
+        renderRecipeNav();
+      });
+    
+      renderEditorCategoryOptions();
+    
+      const addStep = () => {
+        recipe.steps.push({
+          id: uid("step"),
+          instruction: "",
+          ingredients: [],
+        });
+    
+        renderEditor();
+        renderIngredientsPreview();
+      };
+    
+      document
+        .getElementById("addStepButton")
+        .addEventListener("click", addStep);
+    
+      document
+        .getElementById("addStepBottomButton")
+        .addEventListener("click", addStep);
+    
+      renderSteps(recipe);
+    }
+
+    function renderEditorCategoryOptions() {
+      const select = document.getElementById("recipeCategory");
+      const recipe = getRecipe();
+      if (!select || !recipe) return;
+      select.innerHTML = '<option value="">Choose a category</option>';
+      state.data.categories.forEach(category => {
+        const option = document.createElement("option"); option.value = category.id; option.textContent = category.name; option.selected = category.id === recipe.categoryId; select.appendChild(option);
+      });
+      select.onchange = () => {
+        recipe.categoryId = select.value;
+        state.selectedCategoryId = select.value || state.selectedCategoryId;
+        renderCategoryNav();
+        renderRecipeNav();
+      };
+    }
+
+    function renderSteps(recipe) {
+      const container = document.getElementById("stepsEditor");
+      recipe.steps.forEach((step, stepIndex) => {
+        const card = document.createElement("article"); card.className = "step-card";
+        card.innerHTML = `
+          <div class="step-top">
+            <span class="step-number">${stepIndex + 1}</span>
+            <textarea aria-label="Step ${stepIndex + 1} instruction" placeholder="Describe what to do in this step..."></textarea>
+            <div class="step-actions">
+              <button class="btn small" data-action="up" type="button" title="Move up">↑</button>
+              <button class="btn small" data-action="down" type="button" title="Move down">↓</button>
+              <button class="btn small danger" data-action="delete" type="button" title="Delete step">×</button>
+            </div>
+          </div>
+          <div class="ingredients-editor">
+            <h4>Ingredients used in this step</h4>
+            <div class="ingredient-rows"></div>
+            <button class="btn small" data-action="add-ingredient" type="button">+ Add ingredient</button>
+          </div>`;
+        const textarea = card.querySelector("textarea"); textarea.value = step.instruction;
+        textarea.addEventListener("input", () => step.instruction = textarea.value);
+        card.querySelector('[data-action="up"]').addEventListener("click", () => moveItem(recipe.steps, stepIndex, -1));
+        card.querySelector('[data-action="down"]').addEventListener("click", () => moveItem(recipe.steps, stepIndex, 1));
+        card.querySelector('[data-action="delete"]').addEventListener("click", () => { recipe.steps.splice(stepIndex, 1); renderEditor(); renderIngredientsPreview(); });
+        card.querySelector('[data-action="add-ingredient"]').addEventListener("click", () => {
+          step.ingredients.push({ id: uid("ingredient"), quantity: 0, unit: "", name: "", note: "" });
+          renderEditor(); renderIngredientsPreview();
+        });
+        renderIngredientRows(card.querySelector(".ingredient-rows"), step);
+        container.appendChild(card);
+      });
+    }
+
+    function renderIngredientRows(container, step) {
+      step.ingredients.forEach((item, index) => {
+        const row = document.createElement("div"); row.className = "ingredient-row";
+        row.innerHTML = '<input type="number" step="any" placeholder="Qty" aria-label="Quantity"><input placeholder="Unit" aria-label="Unit"><input placeholder="Ingredient" aria-label="Ingredient name"><input placeholder="Note" aria-label="Ingredient note"><button class="btn small danger" type="button">×</button>';
+        const [quantity, unit, name, note, remove] = row.children;
+        quantity.value = item.quantity || ""; unit.value = item.unit; name.value = item.name; note.value = item.note;
+        quantity.addEventListener("input", () => { item.quantity = Number(quantity.value) || 0; renderIngredientsPreview(); });
+        unit.addEventListener("input", () => { item.unit = unit.value; renderIngredientsPreview(); });
+        name.addEventListener("input", () => { item.name = name.value; renderIngredientsPreview(); });
+        note.addEventListener("input", () => { item.note = note.value; renderIngredientsPreview(); });
+        remove.addEventListener("click", () => { step.ingredients.splice(index, 1); renderEditor(); renderIngredientsPreview(); });
+        container.appendChild(row);
+      });
+    }
+
+    function moveItem(array, index, direction) {
+      const target = index + direction;
+      if (target < 0 || target >= array.length) return;
+      [array[index], array[target]] = [array[target], array[index]];
+      renderEditor();
+    }
+
+    function collectIngredients(recipe) {
+      const merged = new Map();
+      recipe.steps.forEach(step => step.ingredients.forEach(item => {
+        if (!item.name.trim()) return;
+        const key = [item.name.trim().toLowerCase(), item.unit.trim().toLowerCase(), item.note.trim().toLowerCase()].join("|");
+        if (!merged.has(key)) merged.set(key, { ...item, quantity: Number(item.quantity) || 0 });
+        else merged.get(key).quantity += Number(item.quantity) || 0;
+      }));
+      return [...merged.values()];
+    }
+
+    function renderIngredientsPreview() {
+      ingredientsPreview.innerHTML = "";
+    
+      if (state.view === "categories") {
+        return;
+      }
+    
+      const recipe = getRecipe();
+    
+      if (!recipe) {
+        return;
+      }
+    
+      const ingredients = collectIngredients(recipe);
+    
+      if (!ingredients.length) {
+        ingredientsPreview.innerHTML =
+          '<li><span class="hint">No ingredients yet.</span></li>';
+        return;
+      }
+    
+      ingredients.forEach(item => {
+        const li = document.createElement("li");
+    
+        li.innerHTML = `
+          <span class="preview-amount">
+            ${formatQuantity(item.quantity)}
+            ${item.unit ? ` ${escapeHtml(item.unit)}` : ""}
+          </span>
+    
+          <span>
+            ${escapeHtml(item.name)}
+            ${
+              item.note
+                ? `<br><span class="preview-note">${escapeHtml(item.note)}</span>`
+                : ""
+            }
+          </span>
+        `;
+    
+        ingredientsPreview.appendChild(li);
+      });
+    }
+
+    function renderImagePreview() {
+      imagePreviewWrap.innerHTML = "";
+    
+      const recipe = getRecipe();
+    
+      if (!recipe || state.view !== "recipe") {
+        return;
+      }
+    
+      recipe.imageType = recipe.imageType || "png";
+    
+      const filename = `${slugify(recipe.name)}.${recipe.imageType}`;
+      const imagePath = `../assets/${filename}`;
+    
+      const previewContainer = document.createElement("div");
+      previewContainer.className = "image-preview-container";
+    
+      const image = document.createElement("img");
+      image.className = "preview-image";
+      image.src = imagePath;
+      image.alt = `${recipe.name} preview`;
+    
+      image.addEventListener(
+        "error",
+        () => {
+          const placeholder = document.createElement("div");
+          placeholder.className = "preview-image-placeholder";
+          placeholder.innerHTML = `
+            <span>
+              No image found<br>
+              <strong>assets/${escapeHtml(filename)}</strong>
+            </span>
+          `;
+    
+          image.replaceWith(placeholder);
+        },
+        { once: true }
+      );
+    
+      previewContainer.appendChild(image);
+    
+      const typeField = document.createElement("div");
+      typeField.className = "field image-type-field";
+      typeField.innerHTML = `
+        <label for="recipeImageType">Image file type</label>
+        <select id="recipeImageType">
+          <option value="jpg">jpg</option>
+          <option value="jpeg">jpeg</option>
+          <option value="png">png</option>
+          <option value="webp">webp</option>
+        </select>
+      `;
+    
+      const typeSelect = typeField.querySelector("#recipeImageType");
+      typeSelect.value = recipe.imageType;
+    
+      typeSelect.addEventListener("change", () => {
+        recipe.imageType = typeSelect.value;
+    
+        const extensionLabel = document.getElementById("imageExtension");
+    
+        if (extensionLabel) {
+          extensionLabel.textContent = recipe.imageType;
+        }
+    
+        renderImagePreview();
+      });
+    
+      imagePreviewWrap.append(previewContainer, typeField);
+    }
+
+    function formatQuantity(value) {
+      const rounded = Math.round(Number(value) * 1000) / 1000;
+      return Number.isInteger(rounded) ? String(rounded) : String(rounded).replace(/0+$/, "").replace(/\.$/, "");
+    }
+
+    function bindValue(id, object, key, afterChange) {
+      const element = document.getElementById(id); element.value = object[key] || "";
+      element.addEventListener("input", () => { object[key] = element.value; afterChange?.(element.value); });
+    }
+
+    function setStatus(message, success) {
+      status.textContent = message; status.className = `status ${success ? "ok" : "bad"}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>'"]/g, character => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "'":"&#39;", '"':"&quot;" })[character]);
+    }
+
+    state.data = normaliseData(window.RECIPE_BOOK_DATA || state.data);
+    state.selectedCategoryId = state.data.categories[0]?.id || null;
+    state.selectedRecipeId = state.data.recipes.find(recipe => recipe.categoryId === state.selectedCategoryId)?.id || state.data.recipes[0]?.id || null;
+    setStatus("Recipe data loaded automatically.", true);
+
+    renderAll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="A simple mobile-first family recipe book.">
+  <title>Our Recipe Book</title>
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-left">
+      <button class="icon-button back-button" id="backButton" type="button" aria-label="Go back" hidden>←</button>
+      <button class="icon-button" id="wakeButton" type="button" aria-pressed="false" title="Keep screen awake">☀</button>
+    </div>
+
+    <button class="brand-button" id="homeButton" type="button">
+      <span class="brand-mark">✦</span>
+      <span id="siteTitle">Our Recipe Book</span>
+    </button>
+
+    <button class="icon-button menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="categoryMenu" aria-label="Open category menu">☰</button>
+  </header>
+
+  <div id="menuBackdrop" class="menu-backdrop" hidden></div>
+  <nav id="categoryMenu" class="category-menu" aria-label="Recipe categories" hidden>
+    <div class="category-menu-heading">
+      <strong>Categories</strong>
+      <button id="closeMenuButton" class="icon-button" type="button" aria-label="Close category menu">×</button>
+    </div>
+    <div id="categoryMenuLinks" class="category-menu-links"></div>
+  </nav>
+
+  <main id="app" class="app" tabindex="-1"></main>
+
+  <template id="recipeCardTemplate">
+    <button class="recipe-card" type="button">
+      <span class="recipe-image-wrap"><img class="recipe-image" alt="" loading="lazy"></span>
+      <span class="recipe-card-copy">
+        <span class="eyebrow"></span>
+        <strong class="recipe-name"></strong>
+        <span class="recipe-description"></span>
+      </span>
+      <span class="recipe-arrow">›</span>
+    </button>
+  </template>
+
+  <script src="data/recipes-data.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>
