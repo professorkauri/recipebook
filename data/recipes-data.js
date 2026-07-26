@@ -2,7 +2,7 @@ window.RECIPE_BOOK_DATA = {
   "settings": {
     "siteTitle": "Our Recipe Book",
     "subtitle": "Favourite recipes for home",
-    "updated": "2026-07-25"
+    "updated": "2026-07-26"
   },
   "categories": [
     {
@@ -198,6 +198,19 @@ window.RECIPE_BOOK_DATA = {
         }
       ],
       "imageType": "jpeg"
+    },
+    {
+      "id": "recipe-ms11b7qt-9way9",
+      "name": "New Recipe",
+      "categoryId": "dessert",
+      "favourite": false,
+      "imageType": "png",
+      "description": "",
+      "baseYield": "",
+      "prepTime": "",
+      "cookTime": "",
+      "notes": "",
+      "steps": []
     }
   ]
 };
