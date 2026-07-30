@@ -13,6 +13,7 @@
   const categoryMenu = document.getElementById("categoryMenu");
   const categoryMenuLinks = document.getElementById("categoryMenuLinks");
   const menuBackdrop = document.getElementById("menuBackdrop");
+  const NEW_RECIPES_CATEGORY_ID = "new-recipes";
 
   let wakeLock = null;
   let wakeRequested = false;
@@ -51,7 +52,13 @@
     image.src = recipeImage(recipe);
     image.alt = recipe.name;
     setImageFallback(image);
-    card.querySelector(".eyebrow").textContent = `${recipe.favourite ? "★ Favourite · " : ""}${category?.name || "Recipe"}`;
+    if (recipe.favourite) {
+      const badge = document.createElement("span");
+      badge.className = "favourite-badge";
+      badge.textContent = "\u2605";
+      card.querySelector(".recipe-image-wrap").appendChild(badge);
+    }
+    card.querySelector(".eyebrow").textContent = category?.name || "Recipe";
     card.querySelector(".recipe-name").textContent = recipe.name;
     card.querySelector(".recipe-description").textContent = recipe.description || recipe.baseYield || "";
     card.addEventListener("click", () => showRecipe(recipe.id));
@@ -67,6 +74,17 @@
     }
     recipes.forEach(recipe => list.appendChild(makeRecipeCard(recipe)));
     return list;
+  }
+
+  function recipeGrid(recipes) {
+    const grid = document.createElement("div");
+    grid.className = "recipe-grid";
+    if (!recipes.length) {
+      grid.innerHTML = '<p class="empty-state">No recipes have been added here yet.</p>';
+      return grid;
+    }
+    recipes.slice(0, 5).forEach(recipe => grid.appendChild(makeRecipeCard(recipe)));
+    return grid;
   }
 
   function renderCategoryMenu() {
@@ -112,12 +130,30 @@
     hero.innerHTML = `<span class="eyebrow">Kitchen collection</span><h1>${escapeHtml(data.settings.siteTitle || "Our Recipe Book")}</h1><p>${escapeHtml(data.settings.subtitle || "Recipes worth making again.")}</p>`;
     app.appendChild(hero);
 
-    const favourites = data.recipes.filter(recipe => recipe.favourite);
+    const favourites = data.recipes.filter(recipe => recipe.favourite).slice(0, 5);
     const favouriteSection = document.createElement("section");
-    favouriteSection.className = "section";
+    favouriteSection.className = "section white";
     favouriteSection.innerHTML = `<div class="section-heading"><h2>Favourites</h2><span class="count">${favourites.length}</span></div>`;
-    favouriteSection.appendChild(recipeList(favourites));
+    favouriteSection.appendChild(recipeGrid(favourites));
     app.appendChild(favouriteSection);
+
+    const recent = [...data.recipes].slice(-5).reverse();
+    const recentSection = document.createElement("section");
+    recentSection.className = "section";
+    recentSection.innerHTML = `<div class="section-heading"><h2>Recent</h2><span class="count">${recent.length}</span></div>`;
+    recentSection.appendChild(recipeGrid(recent));
+    app.appendChild(recentSection);
+
+    const newRecipesCategory = data.categories.find(category => category.id === NEW_RECIPES_CATEGORY_ID)
+      || data.categories.find(category => category.name.trim().toLowerCase() === "new recipes");
+    if (newRecipesCategory) {
+      const newRecipes = data.recipes.filter(recipe => recipe.categoryId === newRecipesCategory.id);
+      const newRecipesSection = document.createElement("section");
+      newRecipesSection.className = "section dark";
+      newRecipesSection.innerHTML = `<div class="section-heading"><h2>New Recipes</h2><span class="count">${newRecipes.length}</span></div>`;
+      newRecipesSection.appendChild(recipeGrid(newRecipes));
+      app.appendChild(newRecipesSection);
+    }
 
     const categorySection = document.createElement("section");
     categorySection.className = "section";
@@ -151,19 +187,39 @@
     window.scrollTo(0, 0);
   }
 
+  function singularIngredientName(name) {
+    return String(name || "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .replace(/\b([^aeiou\s])ies\b$/i, "$1y")
+      .replace(/\b(tomato|potato|hero)es\b$/i, "$1")
+      .replace(/\b([a-z]+(?:ch|sh|x|z))es\b$/i, "$1")
+      .replace(/\b([a-z]*[^sui])s\b$/i, "$1");
+  }
+
+  function pluralScore(name) {
+    const trimmed = String(name || "").trim().toLowerCase();
+    return singularIngredientName(trimmed) === trimmed ? 0 : 1;
+  }
+
   function collectIngredients(recipe) {
     const merged = new Map();
     recipe.steps.forEach(step => (step.ingredients || []).forEach(ingredient => {
-      const key = [ingredient.name.trim().toLowerCase(), ingredient.unit.trim().toLowerCase(), (ingredient.note || "").trim().toLowerCase()].join("|");
+      const key = [singularIngredientName(ingredient.name), ingredient.unit.trim().toLowerCase(), (ingredient.note || "").trim().toLowerCase()].join("|");
       if (!merged.has(key)) merged.set(key, { ...ingredient, quantity: Number(ingredient.quantity) || 0 });
-      else merged.get(key).quantity += Number(ingredient.quantity) || 0;
+      else {
+        const match = merged.get(key);
+        match.quantity += Number(ingredient.quantity) || 0;
+        if (pluralScore(ingredient.name) > pluralScore(match.name)) match.name = ingredient.name;
+      }
     }));
     return [...merged.values()];
   }
 
   function formatQuantity(value) {
     const rounded = Math.round(value * 1000) / 1000;
-    const fractions = new Map([[0.125,"⅛"],[0.25,"¼"],[0.333,"⅓"],[0.5,"½"],[0.667,"⅔"],[0.75,"¾"]]);
+    const fractions = new Map([[0.125,"\u215b"],[0.25,"\u00bc"],[0.33,"\u2153"],[0.333,"\u2153"],[0.5,"\u00bd"],[0.66,"\u2154"],[0.667,"\u2154"],[0.75,"\u00be"]]);
     const whole = Math.floor(rounded);
     const remainder = Math.round((rounded - whole) * 1000) / 1000;
     if (fractions.has(remainder)) return `${whole || ""}${fractions.get(remainder)}`;
@@ -178,16 +234,25 @@
     updateHeader();
     app.innerHTML = "";
 
+    const imageWrap = document.createElement("div");
+    imageWrap.className = "recipe-hero-image-wrap";
     const image = document.createElement("img");
     image.className = "recipe-hero-image";
     image.src = recipeImage(recipe);
     image.alt = recipe.name;
     setImageFallback(image);
-    app.appendChild(image);
+    imageWrap.appendChild(image);
+    if (recipe.favourite) {
+      const badge = document.createElement("span");
+      badge.className = "favourite-badge";
+      badge.textContent = "\u2605";
+      imageWrap.appendChild(badge);
+    }
+    app.appendChild(imageWrap);
 
     const header = document.createElement("section");
     const category = getCategory(recipe.categoryId);
-    header.innerHTML = `<span class="eyebrow">${recipe.favourite ? "★ Favourite · " : ""}${escapeHtml(category?.name || "Recipe")}</span><h1 class="recipe-title">${escapeHtml(recipe.name)}</h1><p class="recipe-summary">${escapeHtml(recipe.description || "")}</p>`;
+    header.innerHTML = `<span class="eyebrow">${escapeHtml(category?.name || "Recipe")}</span><h1 class="recipe-title">${escapeHtml(recipe.name)}</h1><p class="recipe-summary">${escapeHtml(recipe.description || "")}</p>`;
     const meta = document.createElement("div");
     meta.className = "meta-row";
     [recipe.baseYield, recipe.prepTime && `Prep ${recipe.prepTime}`, recipe.cookTime && `Cook ${recipe.cookTime}`].filter(Boolean).forEach(value => {
@@ -207,7 +272,7 @@
     app.appendChild(ingredientsSection);
 
     const stepsSection = document.createElement("section");
-    stepsSection.className = "section";
+    stepsSection.className = "section white";
     stepsSection.innerHTML = '<div class="section-heading"><h2>Method</h2></div><div class="steps"></div>';
     const stepsContainer = stepsSection.querySelector(".steps");
     recipe.steps.forEach(step => {

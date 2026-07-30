@@ -135,6 +135,7 @@
     const ingredientsPreview = document.getElementById("ingredientsPreview");
     const imagePreviewWrap = document.getElementById("imagePreviewWrap");
     const status = document.getElementById("status");
+    const NEW_RECIPES_CATEGORY_ID = "new-recipes";
 
     document.getElementById("exportButton").addEventListener("click", exportData);
     document.getElementById("addRecipeButton").addEventListener("click", addRecipe);
@@ -167,6 +168,25 @@
       data.categories = Array.isArray(data.categories) ? data.categories : [];
       data.recipes = Array.isArray(data.recipes) ? data.recipes : [];
       data.categories.forEach(category => { category.id ||= slugify(category.name) || uid("category"); category.name ||= "Untitled category"; });
+      const newRecipesCategory = data.categories.find(category => category.id === NEW_RECIPES_CATEGORY_ID)
+        || data.categories.find(category => category.name.trim().toLowerCase() === "new recipes");
+      if (newRecipesCategory) {
+        const previousId = newRecipesCategory.id;
+        newRecipesCategory.id = NEW_RECIPES_CATEGORY_ID;
+        if (!newRecipesCategory.name.trim()) newRecipesCategory.name = "New Recipes";
+        data.recipes.forEach(recipe => {
+          if (recipe.categoryId === previousId) recipe.categoryId = NEW_RECIPES_CATEGORY_ID;
+        });
+        let hasKeptNewRecipesCategory = false;
+        data.categories = data.categories.filter(category => {
+          if (category.id !== NEW_RECIPES_CATEGORY_ID) return true;
+          if (hasKeptNewRecipesCategory) return false;
+          hasKeptNewRecipesCategory = true;
+          return true;
+        });
+      } else {
+        data.categories.push({ id: NEW_RECIPES_CATEGORY_ID, name: "New Recipes" });
+      }
       data.recipes.forEach(recipe => {
         recipe.id ||= slugify(recipe.name) || uid("recipe");
         recipe.name ||= "Untitled recipe";
@@ -241,6 +261,10 @@
     }
 
     function deleteCategory(categoryId) {
+      if (categoryId === NEW_RECIPES_CATEGORY_ID) {
+        alert("New Recipes is a permanent category and cannot be deleted.");
+        return;
+      }
       if (state.data.recipes.some(recipe => recipe.categoryId === categoryId)) {
         alert("Move recipes out of this category before deleting it.");
         return;
@@ -330,6 +354,10 @@
         const input = document.createElement("input"); input.value = category.name;
         input.addEventListener("input", () => { category.name = input.value; renderCategoryNav(); renderEditorCategoryOptions(); });
         const remove = document.createElement("button"); remove.className = "btn small danger"; remove.type = "button"; remove.textContent = "×";
+        if (category.id === NEW_RECIPES_CATEGORY_ID) {
+          remove.disabled = true;
+          remove.title = "Permanent category";
+        }
         remove.addEventListener("click", () => deleteCategory(category.id));
         row.append(input, remove); categoryList.appendChild(row);
       });
@@ -547,13 +575,33 @@
       renderEditor();
     }
 
+    function singularIngredientName(name) {
+      return String(name || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ")
+        .replace(/\b([^aeiou\s])ies\b$/i, "$1y")
+        .replace(/\b(tomato|potato|hero)es\b$/i, "$1")
+        .replace(/\b([a-z]+(?:ch|sh|x|z))es\b$/i, "$1")
+        .replace(/\b([a-z]*[^sui])s\b$/i, "$1");
+    }
+
+    function pluralScore(name) {
+      const trimmed = String(name || "").trim().toLowerCase();
+      return singularIngredientName(trimmed) === trimmed ? 0 : 1;
+    }
+
     function collectIngredients(recipe) {
       const merged = new Map();
       recipe.steps.forEach(step => step.ingredients.forEach(item => {
         if (!item.name.trim()) return;
-        const key = [item.name.trim().toLowerCase(), item.unit.trim().toLowerCase(), item.note.trim().toLowerCase()].join("|");
+        const key = [singularIngredientName(item.name), item.unit.trim().toLowerCase(), item.note.trim().toLowerCase()].join("|");
         if (!merged.has(key)) merged.set(key, { ...item, quantity: Number(item.quantity) || 0 });
-        else merged.get(key).quantity += Number(item.quantity) || 0;
+        else {
+          const match = merged.get(key);
+          match.quantity += Number(item.quantity) || 0;
+          if (pluralScore(item.name) > pluralScore(match.name)) match.name = item.name;
+        }
       }));
       return [...merged.values()];
     }
