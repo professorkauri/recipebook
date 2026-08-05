@@ -2,7 +2,11 @@ window.RECIPE_BOOK_DATA = {
   "settings": {
     "siteTitle": "Our Recipe Book",
     "subtitle": "Favourite recipes for home",
+<<<<<<< HEAD
     "updated": "2026-08-05"
+=======
+    "updated": "2026-07-30"
+>>>>>>> f57e2ef3473a13fecae9afdc7ff9e4ca6793b27d
   },
   "categories": [
     {
@@ -16,6 +20,10 @@ window.RECIPE_BOOK_DATA = {
     {
       "id": "dessert",
       "name": "Dessert"
+    },
+    {
+      "id": "new-recipes",
+      "name": "New Recipes"
     }
   ],
   "recipes": [
@@ -23,7 +31,7 @@ window.RECIPE_BOOK_DATA = {
       "id": "chocolate-chip-cookies",
       "name": "Orange Crunches",
       "categoryId": "baking",
-      "favourite": false,
+      "favourite": true,
       "description": "crunchy cookies with a taste of Oranges.",
       "baseYield": "1 batch",
       "prepTime": "15 mins",
@@ -226,6 +234,7 @@ window.RECIPE_BOOK_DATA = {
       "steps": []
     },
     {
+<<<<<<< HEAD
       "id": "recipe-msgoys2f-j2np0",
       "name": "Tea Loaf ",
       "categoryId": "baking",
@@ -403,6 +412,19 @@ window.RECIPE_BOOK_DATA = {
           "ingredients": []
         }
       ]
+=======
+      "id": "recipe-ms6rj9oz-lyg1s",
+      "name": "New Recipe",
+      "categoryId": "baking",
+      "favourite": false,
+      "imageType": "png",
+      "description": "",
+      "baseYield": "",
+      "prepTime": "",
+      "cookTime": "",
+      "notes": "",
+      "steps": []
+>>>>>>> f57e2ef3473a13fecae9afdc7ff9e4ca6793b27d
     }
   ]
 };
