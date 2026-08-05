@@ -2,7 +2,7 @@ window.RECIPE_BOOK_DATA = {
   "settings": {
     "siteTitle": "Our Recipe Book",
     "subtitle": "Favourite recipes for home",
-    "updated": "2026-07-26"
+    "updated": "2026-08-05"
   },
   "categories": [
     {
@@ -224,6 +224,185 @@ window.RECIPE_BOOK_DATA = {
       "cookTime": "",
       "notes": "",
       "steps": []
+    },
+    {
+      "id": "recipe-msgoys2f-j2np0",
+      "name": "Tea Loaf ",
+      "categoryId": "baking",
+      "favourite": true,
+      "imageType": "png",
+      "description": "A fruity Loaf ",
+      "baseYield": "1 Loaf",
+      "prepTime": "2hrs cooling + 15 prep",
+      "cookTime": "45mins at 180º ",
+      "notes": "",
+      "steps": [
+        {
+          "id": "step-msgp0kll-8zq5k",
+          "instruction": "Soak Currants, brown sugar and tea bags in boiled water until cooled or overnight. ",
+          "ingredients": [
+            {
+              "id": "ingredient-msgp1lgv-5phi8",
+              "quantity": 1,
+              "unit": "Cup",
+              "name": "Currants ",
+              "note": "or dried fruit mix"
+            },
+            {
+              "id": "ingredient-msgp22ut-q66eo",
+              "quantity": 1,
+              "unit": "Cup ",
+              "name": "Brown sugar ",
+              "note": ""
+            },
+            {
+              "id": "ingredient-msgp2fmz-8soea",
+              "quantity": 2,
+              "unit": "",
+              "name": "Tea bags",
+              "note": ""
+            },
+            {
+              "id": "ingredient-msgp2qb8-p0bkh",
+              "quantity": 1,
+              "unit": "Cup ",
+              "name": "Boiled water",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-msgp3axd-fgsd9",
+          "instruction": "Remove Tea bags and stir wet mixture together to make sure sugar is combined. ",
+          "ingredients": []
+        },
+        {
+          "id": "step-msgp3iyq-croau",
+          "instruction": "Add flour and baking powder to wet mixture. Combine til all flour is no longer visible.",
+          "ingredients": [
+            {
+              "id": "ingredient-msgp4yoq-b2jre",
+              "quantity": 2,
+              "unit": "Cups",
+              "name": "Flour ",
+              "note": ""
+            },
+            {
+              "id": "ingredient-msgp5gro-vrlax",
+              "quantity": 2,
+              "unit": "Tsp",
+              "name": "Baking Powder",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-msgp4j5j-s3apo",
+          "instruction": "Pour into lined loaf tin.",
+          "ingredients": []
+        },
+        {
+          "id": "step-msgp7yj8-pr0v6",
+          "instruction": "Place tin in centre of oven. ",
+          "ingredients": []
+        }
+      ]
+    },
+    {
+      "id": "recipe-msgp8eh8-p5ryb",
+      "name": "Anzac Biscuits ",
+      "categoryId": "baking",
+      "favourite": true,
+      "imageType": "jpeg",
+      "description": "",
+      "baseYield": "",
+      "prepTime": "180º",
+      "cookTime": "15 min",
+      "notes": "can be easily doubled ",
+      "steps": [
+        {
+          "id": "step-msgplybv-kmiiu",
+          "instruction": "PreHeat oven to 180º",
+          "ingredients": []
+        },
+        {
+          "id": "step-msgpedf4-vuwxf",
+          "instruction": "Mix together Flour, Sugar and Oats in a clean bowl",
+          "ingredients": [
+            {
+              "id": "ingredient-msgpezbk-o1e9t",
+              "quantity": 0.5,
+              "unit": "Cup",
+              "name": "Flour ",
+              "note": ""
+            },
+            {
+              "id": "ingredient-msgpfd5s-yqez1",
+              "quantity": 0.33,
+              "unit": "Cup",
+              "name": "Sugar",
+              "note": ""
+            },
+            {
+              "id": "ingredient-msgpfmw6-a8j8w",
+              "quantity": 1,
+              "unit": "Cup",
+              "name": "Rolled Oats ",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-msgpg7ub-w88i1",
+          "instruction": "Melt Butter and Golden Syrup together in a pot on stove top.",
+          "ingredients": [
+            {
+              "id": "ingredient-msgphaxq-m5fag",
+              "quantity": 50,
+              "unit": "Grams",
+              "name": "Butter",
+              "note": ""
+            },
+            {
+              "id": "ingredient-msgphkcm-8vgkx",
+              "quantity": 1,
+              "unit": "TBS",
+              "name": "Golden syrup",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-msgpi0a8-wbb8c",
+          "instruction": "Dissolve Baking Soda in Hot Water, then add to the butter mix.",
+          "ingredients": [
+            {
+              "id": "ingredient-msgpidpk-466oi",
+              "quantity": 0.5,
+              "unit": "Tsp",
+              "name": "Baking Soda",
+              "note": ""
+            },
+            {
+              "id": "ingredient-msgpina0-nqx4w",
+              "quantity": 2,
+              "unit": "TBS",
+              "name": "Hot water",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-msgpj1ph-gvrce",
+          "instruction": "Add butter mixture to flour mixture. \nCombine well ",
+          "ingredients": []
+        },
+        {
+          "id": "step-msgpl0vy-q2ltz",
+          "instruction": "Form balls and press to shape. \nplace on tray \ncook until golden ",
+          "ingredients": []
+        }
+      ]
     }
   ]
 };
