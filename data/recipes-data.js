@@ -468,6 +468,11 @@ window.RECIPE_BOOK_DATA = {
               "note": ""
             }
           ]
+        },
+        {
+          "id": "step-msgq96lz-u3o4j",
+          "instruction": "Form small balls and place on tray. \nCook in the middle of the oven. ",
+          "ingredients": []
         }
       ]
     }
