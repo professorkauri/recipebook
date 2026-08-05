@@ -2,11 +2,7 @@ window.RECIPE_BOOK_DATA = {
   "settings": {
     "siteTitle": "Our Recipe Book",
     "subtitle": "Favourite recipes for home",
-<<<<<<< HEAD
     "updated": "2026-08-05"
-=======
-    "updated": "2026-07-30"
->>>>>>> f57e2ef3473a13fecae9afdc7ff9e4ca6793b27d
   },
   "categories": [
     {
@@ -20,10 +16,6 @@ window.RECIPE_BOOK_DATA = {
     {
       "id": "dessert",
       "name": "Dessert"
-    },
-    {
-      "id": "new-recipes",
-      "name": "New Recipes"
     }
   ],
   "recipes": [
@@ -31,7 +23,7 @@ window.RECIPE_BOOK_DATA = {
       "id": "chocolate-chip-cookies",
       "name": "Orange Crunches",
       "categoryId": "baking",
-      "favourite": true,
+      "favourite": false,
       "description": "crunchy cookies with a taste of Oranges.",
       "baseYield": "1 batch",
       "prepTime": "15 mins",
@@ -234,7 +226,6 @@ window.RECIPE_BOOK_DATA = {
       "steps": []
     },
     {
-<<<<<<< HEAD
       "id": "recipe-msgoys2f-j2np0",
       "name": "Tea Loaf ",
       "categoryId": "baking",
@@ -412,19 +403,73 @@ window.RECIPE_BOOK_DATA = {
           "ingredients": []
         }
       ]
-=======
-      "id": "recipe-ms6rj9oz-lyg1s",
-      "name": "New Recipe",
+    },
+    {
+      "id": "recipe-msgq0gd8-gp0km",
+      "name": "Theos choco cookies",
       "categoryId": "baking",
-      "favourite": false,
+      "favourite": true,
       "imageType": "png",
-      "description": "",
+      "description": "these are just the afghan recipe but without the cornflakes ",
       "baseYield": "",
-      "prepTime": "",
-      "cookTime": "",
+      "prepTime": "180º",
+      "cookTime": "15 mins ",
       "notes": "",
-      "steps": []
->>>>>>> f57e2ef3473a13fecae9afdc7ff9e4ca6793b27d
+      "steps": [
+        {
+          "id": "step-msgq45lh-febi7",
+          "instruction": "Cream Butter, sugar and cocoa together until fluffy and sugar is mostly dissolved. ",
+          "ingredients": [
+            {
+              "id": "ingredient-msgq54g4-glhbv",
+              "quantity": 200,
+              "unit": "Grams",
+              "name": "Butter",
+              "note": "Softened "
+            },
+            {
+              "id": "ingredient-msgq5egb-vxbjq",
+              "quantity": 0.5,
+              "unit": "Cup",
+              "name": "Sugar",
+              "note": ""
+            },
+            {
+              "id": "ingredient-msgq69hx-kx3d8",
+              "quantity": 0.25,
+              "unit": "Cup",
+              "name": "Cocoa",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-msgq6m29-d4o56",
+          "instruction": "Add Vanilla Essence ",
+          "ingredients": [
+            {
+              "id": "ingredient-msgq6uhh-eeb26",
+              "quantity": 1,
+              "unit": "Tsp",
+              "name": "Vanilla Essence ",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-msgq71d5-cyhuh",
+          "instruction": "Add flour until flour combined.",
+          "ingredients": [
+            {
+              "id": "ingredient-msgq7eob-8pfxi",
+              "quantity": 1.25,
+              "unit": "Cup",
+              "name": "Flour",
+              "note": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 };
