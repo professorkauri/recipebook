@@ -2,7 +2,7 @@ window.RECIPE_BOOK_DATA = {
   "settings": {
     "siteTitle": "Our Recipe Book",
     "subtitle": "Favourite recipes for home",
-    "updated": "2026-08-05"
+    "updated": "2026-08-06"
   },
   "categories": [
     {
@@ -16,6 +16,10 @@ window.RECIPE_BOOK_DATA = {
     {
       "id": "dessert",
       "name": "Dessert"
+    },
+    {
+      "id": "new-recipes",
+      "name": "New Recipes"
     }
   ],
   "recipes": [
@@ -473,6 +477,131 @@ window.RECIPE_BOOK_DATA = {
           "id": "step-msgq96lz-u3o4j",
           "instruction": "Form small balls and place on tray. \nCook in the middle of the oven. ",
           "ingredients": []
+        }
+      ]
+    },
+    {
+      "id": "recipe-msgr5wbk-r9rsg",
+      "name": "Rosé Tteokbokki",
+      "categoryId": "new-recipes",
+      "favourite": false,
+      "imageType": "jpeg",
+      "description": "To our taste ",
+      "baseYield": "Serves 2",
+      "prepTime": "",
+      "cookTime": "",
+      "notes": "",
+      "steps": [
+        {
+          "id": "step-msgr960m-03j5b",
+          "instruction": "Soak Rice cakes in warm water ",
+          "ingredients": []
+        },
+        {
+          "id": "step-msgr6q2v-tixgb",
+          "instruction": "Place water and rice cakes into a pot. Cover and cook for 5 mins",
+          "ingredients": [
+            {
+              "id": "ingredient-msgr7yl6-uo57s",
+              "quantity": 500,
+              "unit": "Grams",
+              "name": "Rice Cakes ",
+              "note": ""
+            },
+            {
+              "id": "ingredient-msgr84gr-yda2l",
+              "quantity": 1,
+              "unit": "Cup",
+              "name": "Water",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-msgr9h0x-v5m42",
+          "instruction": "Combine Gochugaru, Gochujang, Sugar,Soy Sauce, Cream, Milk and water together in a bowl until mixture is orange, ",
+          "ingredients": [
+            {
+              "id": "ingredient-msgr9nj6-1ntlo",
+              "quantity": 1.5,
+              "unit": "TBS",
+              "name": "Gochujang",
+              "note": "paste"
+            },
+            {
+              "id": "ingredient-msgrcwai-0ixs1",
+              "quantity": 1.5,
+              "unit": "TBS",
+              "name": "Brown Sugar",
+              "note": ""
+            },
+            {
+              "id": "ingredient-msgrd3e0-2jpky",
+              "quantity": 1,
+              "unit": "Tsp",
+              "name": "Gochugaru",
+              "note": "flakes"
+            },
+            {
+              "id": "ingredient-msgrdgat-oyqge",
+              "quantity": 1,
+              "unit": "TBS",
+              "name": "Soy Sauce ",
+              "note": ""
+            },
+            {
+              "id": "ingredient-msgrdrkd-1fmt6",
+              "quantity": 300,
+              "unit": "Mls",
+              "name": "Cream",
+              "note": " "
+            },
+            {
+              "id": "ingredient-msgre1f0-u2dzo",
+              "quantity": 100,
+              "unit": "Mls",
+              "name": "Milk ",
+              "note": ""
+            },
+            {
+              "id": "ingredient-msgreag0-ceu9r",
+              "quantity": 0.5,
+              "unit": "Cup",
+              "name": "Water",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-msgrepft-4bz69",
+          "instruction": "Add the sauce, mixing well with the wooden spoon. Cook another 5 minutes, stirring occasionally.",
+          "ingredients": []
+        },
+        {
+          "id": "step-msgrgk9e-slbhe",
+          "instruction": "Add Parmesan, allow to melt through ",
+          "ingredients": [
+            {
+              "id": "ingredient-msgrgx67-bwwfk",
+              "quantity": 100,
+              "unit": "Grams",
+              "name": "Parmesan",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-msgrhiv8-iusnp",
+          "instruction": "Serve with a boiled egg. ",
+          "ingredients": [
+            {
+              "id": "ingredient-msgrhvpr-3gwlh",
+              "quantity": 4,
+              "unit": "",
+              "name": "Eggs",
+              "note": "Boiled "
+            }
+          ]
         }
       ]
     }
