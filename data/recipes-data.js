@@ -2,7 +2,7 @@ window.RECIPE_BOOK_DATA = {
   "settings": {
     "siteTitle": "Our Recipe Book",
     "subtitle": "Favourite recipes for home",
-    "updated": "2026-08-06"
+    "updated": "2026-08-08"
   },
   "categories": [
     {
@@ -602,6 +602,126 @@ window.RECIPE_BOOK_DATA = {
               "note": "Boiled "
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "recipe-mskyd1z0-tl93k",
+      "name": "German Chocolate Cake ",
+      "categoryId": "baking",
+      "favourite": false,
+      "imageType": "png",
+      "description": "A large Moist chocolate cake ",
+      "baseYield": "",
+      "prepTime": "Oven to 150º",
+      "cookTime": "30-40 mins ",
+      "notes": "mixture is very runny. \ncan separate into multiple dishes. \nnormally use a roasting dish. ",
+      "steps": [
+        {
+          "id": "step-mskye8z2-e2lqe",
+          "instruction": "Melt butter ",
+          "ingredients": [
+            {
+              "id": "ingredient-mskyen21-6sfgw",
+              "quantity": 250,
+              "unit": "g",
+              "name": "Butter",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-mskyfrqe-7rykz",
+          "instruction": "Cream eggs and sugar until fluffy. and sugar mostly dissolved. add melted butter to mixture. ",
+          "ingredients": [
+            {
+              "id": "ingredient-mskygxc3-c1vn9",
+              "quantity": 4,
+              "unit": "",
+              "name": "Eggs",
+              "note": ""
+            },
+            {
+              "id": "ingredient-mskyh2k1-yek1w",
+              "quantity": 3,
+              "unit": "Cups",
+              "name": "Sugar",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-mskyhc0t-dri2v",
+          "instruction": "combine milk, vinegar and vanilla. \nadd all liquids to creamed mixture. ",
+          "ingredients": [
+            {
+              "id": "ingredient-mskyiugz-c61r2",
+              "quantity": 2,
+              "unit": "Cups ",
+              "name": "Milk",
+              "note": ""
+            },
+            {
+              "id": "ingredient-mskyj26b-wf4gu",
+              "quantity": 0.25,
+              "unit": "Cup",
+              "name": "Vinegar ",
+              "note": ""
+            },
+            {
+              "id": "ingredient-mskyjeud-ay6ij",
+              "quantity": 4,
+              "unit": "Tsp",
+              "name": "Vanilla",
+              "note": ""
+            },
+            {
+              "id": "ingredient-mskyk8e8-jmtyx",
+              "quantity": 1.5,
+              "unit": "Cups",
+              "name": "Hot Water",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-mskykq3q-j6nrl",
+          "instruction": "Mix together dry ingredients. \nSlowly add dry mix to wet mix. \nMix until combined. ",
+          "ingredients": [
+            {
+              "id": "ingredient-mskyl3u7-mljo9",
+              "quantity": 1,
+              "unit": "Cup",
+              "name": "Cocoa",
+              "note": ""
+            },
+            {
+              "id": "ingredient-mskylduv-uqr3k",
+              "quantity": 4,
+              "unit": "Cups",
+              "name": "FLour",
+              "note": ""
+            },
+            {
+              "id": "ingredient-mskylmqr-mpib9",
+              "quantity": 2,
+              "unit": "TBS",
+              "name": "Baking powder",
+              "note": ""
+            },
+            {
+              "id": "ingredient-mskylz52-v06ai",
+              "quantity": 2,
+              "unit": "Tsp ",
+              "name": "Baking soda ",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-mskymfwa-t9w40",
+          "instruction": "Line Roasting Dish. \nAdd mixture slowly to roasting dish. \nPlace in centre of oven \n",
+          "ingredients": []
         }
       ]
     }
