@@ -30,7 +30,7 @@ window.RECIPE_BOOK_DATA = {
       "favourite": false,
       "description": "crunchy cookies with a taste of Oranges.",
       "baseYield": "1 batch",
-      "prepTime": "15 mins",
+      "prepTime": "Oven 180ºC",
       "cookTime": "15-20 mins",
       "notes": "Let the tray cool for five minutes before moving the cookies.",
       "steps": [
@@ -142,7 +142,7 @@ window.RECIPE_BOOK_DATA = {
       "favourite": true,
       "description": "A quick, comforting pasta for busy evenings.",
       "baseYield": "Serves 4",
-      "prepTime": "10 mins",
+      "prepTime": "",
       "cookTime": "20 mins",
       "notes": "Reserve a little pasta water in case the sauce needs loosening.",
       "steps": [
@@ -237,8 +237,8 @@ window.RECIPE_BOOK_DATA = {
       "imageType": "png",
       "description": "A fruity Loaf ",
       "baseYield": "1 Loaf",
-      "prepTime": "2hrs cooling + 15 prep",
-      "cookTime": "45mins at 180º ",
+      "prepTime": "Oven 180ºC",
+      "cookTime": "45mins",
       "notes": "",
       "steps": [
         {
@@ -320,7 +320,7 @@ window.RECIPE_BOOK_DATA = {
       "imageType": "jpeg",
       "description": "",
       "baseYield": "",
-      "prepTime": "180º",
+      "prepTime": "Oven 180ºC",
       "cookTime": "15 min",
       "notes": "can be easily doubled ",
       "steps": [
@@ -416,7 +416,7 @@ window.RECIPE_BOOK_DATA = {
       "imageType": "png",
       "description": "these are just the afghan recipe but without the cornflakes ",
       "baseYield": "",
-      "prepTime": "180º",
+      "prepTime": "Oven 180ºC",
       "cookTime": "15 mins ",
       "notes": "",
       "steps": [

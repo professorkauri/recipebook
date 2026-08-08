@@ -8,7 +8,7 @@
     :root {
       --bg: #f5f3f7; --panel: #fff; --ink: #2f2935; --muted: #766f7a;
       --line: #ded8e2; --gold: #a98639; --purple: #7650a7; --purple-soft: #f2edf8;
-      --danger: #a34450; --ok: #3f7757; --radius: 12px;
+      --danger: #a34450; --radius: 12px;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     * { box-sizing: border-box; }
@@ -67,6 +67,10 @@
     .image-type-field {
       margin-top: 12px;
     }
+
+    *::placeholder {
+      color:var(--purple-soft);
+    }
     
     .image-type-field select {
       width: 100%;
@@ -77,10 +81,21 @@
     .preview-amount { color: var(--purple); font-weight: 800; }
     .preview-note { color: var(--muted); font-size: .78rem; }
     .empty { display: grid; place-items: center; min-height: calc(100vh - 44px); text-align: center; color: var(--muted); }
-    .status { margin-top: 10px; color: var(--muted); font-size: .78rem; }
-    .status.ok { color: var(--ok); }
-    .status.bad { color: var(--danger); }
     .category-edit-row { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+    .converter-tab { position: fixed; top: 18px; right: 0; z-index: 20; display: grid; place-items: center; width: 44px; height: 38px; padding: 9px 12px; color: #fff; border: 1px solid var(--gold); border-right: 0; border-radius: 10px 0 0 10px; background: var(--gold); box-shadow: 0 5px 18px rgba(47, 41, 53, .2); }
+    .converter-tab svg { display: block; width: 20px; height: 20px; fill: currentColor; }
+    .converter-dialog { width: min(620px, calc(100% - 28px)); max-height: calc(100vh - 28px); padding: 0; color: var(--ink); border: 1px solid var(--line); border-radius: 16px; background: var(--panel); box-shadow: 0 24px 70px rgba(47, 41, 53, .32); }
+    .converter-dialog::backdrop { background: rgba(47, 41, 53, .5); }
+    .converter-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 20px 20px 15px; border-bottom: 1px solid var(--line); }
+    .converter-heading h2 { margin: 3px 0 0; font-family: Georgia, serif; font-weight: 500; }
+    .converter-kicker { color: var(--gold); text-transform: uppercase; letter-spacing: .08em; font-size: .68rem; font-weight: 800; }
+    .converter-close { flex: 0 0 auto; width: 36px; height: 36px; padding: 0; color: var(--purple); border: 0; border-radius: 999px; background: var(--purple-soft); font-size: 1.45rem; }
+    .converter-rows { padding: 5px 20px 20px; overflow-y: auto; }
+    .converter-row { display: grid; grid-template-columns: minmax(150px, 1fr) minmax(90px, .7fr) minmax(100px, .8fr); align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .converter-row label { color: var(--ink); font-size: .82rem; }
+    .converter-row input { min-width: 0; }
+    .converter-row output { color: var(--purple); font-weight: 800; text-align: right; }
+    @media (max-width: 520px) { .converter-row { grid-template-columns: 1fr minmax(82px, .65fr); gap: 7px 10px; } .converter-row output { grid-column: 1 / -1; min-height: 1.2em; text-align: left; } }
     @media (max-width: 1100px) { .app { grid-template-columns: 220px 1fr; } .preview { position: static; grid-column: 2; width: auto; height: auto; border-left: 0; border-top: 1px solid var(--line); } }
   </style>
 </head>
@@ -91,9 +106,6 @@
       <div class="toolbar">
         <button id="exportButton" class="btn gold" type="button">Export data</button>
       </div>
-      <p class="hint">Recipe data loads automatically from <strong>../data/recipes-data.js</strong>. Export its replacement when finished.</p>
-      <div id="status" class="status"></div>
-
       <button id="manageCategoriesButton" class="btn primary" type="button">Manage Categories</button>
 
       <div class="nav-heading">Categories</div>
@@ -113,6 +125,28 @@
       <ul id="ingredientsPreview" class="preview-list"></ul>
     </aside>
   </div>
+
+  <button id="converterTab" class="converter-tab" type="button" aria-label="Open measurement calculator" aria-haspopup="dialog" aria-controls="measurementConverter" title="Measurement calculator">
+    <svg viewBox="0 0 640 640" aria-hidden="true" focusable="false"><path d="M534.6 182.6C547.1 170.1 547.1 149.8 534.6 137.3L470.6 73.3C461.4 64.1 447.7 61.4 435.7 66.4C423.7 71.4 416 83.1 416 96L416 128L256 128C150 128 64 214 64 320C64 337.7 78.3 352 96 352C113.7 352 128 337.7 128 320C128 249.3 185.3 192 256 192L416 192L416 224C416 236.9 423.8 248.6 435.8 253.6C447.8 258.6 461.5 255.8 470.7 246.7L534.7 182.7zM105.4 457.4C92.9 469.9 92.9 490.2 105.4 502.7L169.4 566.7C178.6 575.9 192.3 578.6 204.3 573.6C216.3 568.6 224 556.9 224 544L224 512L384 512C490 512 576 426 576 320C576 302.3 561.7 288 544 288C526.3 288 512 302.3 512 320C512 390.7 454.7 448 384 448L224 448L224 416C224 403.1 216.2 391.4 204.2 386.4C192.2 381.4 178.5 384.2 169.3 393.3L105.3 457.3z"/></svg>
+  </button>
+
+  <dialog id="measurementConverter" class="converter-dialog" aria-labelledby="converterTitle">
+    <div class="converter-heading">
+      <div>
+        <span class="converter-kicker">Imperial to metric</span>
+        <h2 id="converterTitle">Measurement calculator</h2>
+      </div>
+      <button id="closeConverterButton" class="converter-close" type="button" aria-label="Close measurement calculator">×</button>
+    </div>
+    <div class="converter-rows">
+      <div class="converter-row" data-factor="28.349523125" data-unit="g"><label for="convertOunces">Ounces (oz)</label><input id="convertOunces" type="number" inputmode="decimal" step="any" placeholder="0"><output>—</output></div>
+      <div class="converter-row" data-factor="0.45359237" data-unit="kg"><label for="convertPounds">Pounds (lb)</label><input id="convertPounds" type="number" inputmode="decimal" step="any" placeholder="0"><output>—</output></div>
+      <div class="converter-row" data-factor="28.4130625" data-unit="ml"><label for="convertFluidOunces">Fluid ounces (fl oz)</label><input id="convertFluidOunces" type="number" inputmode="decimal" step="any" placeholder="0"><output>—</output></div>
+      <div class="converter-row" data-factor="284.130625" data-unit="ml"><label for="convertCups">Cups</label><input id="convertCups" type="number" inputmode="decimal" step="any" placeholder="0"><output>—</output></div>
+      <div class="converter-row" data-factor="568.26125" data-unit="ml"><label for="convertPints">Pints (pt)</label><input id="convertPints" type="number" inputmode="decimal" step="any" placeholder="0"><output>—</output></div>
+      <div class="converter-row" data-conversion="fahrenheit" data-unit="°C"><label for="convertFahrenheit">Fahrenheit (°F)</label><input id="convertFahrenheit" type="number" inputmode="decimal" step="any" placeholder="0"><output>—</output></div>
+    </div>
+  </dialog>
 
   <script src="../data/recipes-data.js"></script>
   <script>
@@ -134,10 +168,35 @@
     const categoryNav = document.getElementById("categoryNav");
     const ingredientsPreview = document.getElementById("ingredientsPreview");
     const imagePreviewWrap = document.getElementById("imagePreviewWrap");
-    const status = document.getElementById("status");
+    const converterTab = document.getElementById("converterTab");
+    const measurementConverter = document.getElementById("measurementConverter");
+    const closeConverterButton = document.getElementById("closeConverterButton");
     const NEW_RECIPES_CATEGORY_ID = "new-recipes";
 
     document.getElementById("exportButton").addEventListener("click", exportData);
+    converterTab.addEventListener("click", () => {
+      measurementConverter.showModal();
+      measurementConverter.querySelector("input")?.focus();
+    });
+    closeConverterButton.addEventListener("click", () => measurementConverter.close());
+    measurementConverter.addEventListener("click", event => {
+      if (event.target === measurementConverter) measurementConverter.close();
+    });
+    measurementConverter.querySelectorAll(".converter-row").forEach(row => {
+      const input = row.querySelector("input");
+      const output = row.querySelector("output");
+      input.addEventListener("input", () => {
+        if (input.value.trim() === "") {
+          output.textContent = "—";
+          return;
+        }
+        const value = Number(input.value);
+        const converted = row.dataset.conversion === "fahrenheit"
+          ? (value - 32) * 5 / 9
+          : value * Number(row.dataset.factor);
+        output.textContent = `${new Intl.NumberFormat(undefined, { maximumFractionDigits: 2 }).format(converted)} ${row.dataset.unit}`;
+      });
+    });
     document.getElementById("addRecipeButton").addEventListener("click", addRecipe);
     document.getElementById("manageCategoriesButton").addEventListener("click", () => {
       state.view = "categories";
@@ -220,7 +279,6 @@
       link.click();
       link.remove();
       URL.revokeObjectURL(url);
-      setStatus("Exported recipes-data.js. Replace the file in the data folder.", true);
     }
 
     function addRecipe() {
@@ -418,7 +476,7 @@
             </div>
     
             <div class="field">
-              <label for="prepTime">Preparation time</label>
+              <label for="prepTime">Preheat</label>
               <input id="prepTime" placeholder="15 mins">
             </div>
     
@@ -437,9 +495,6 @@
         <section class="panel">
           <div class="panel-heading">
             <h2>Method and ingredients</h2>
-            <button id="addStepButton" class="btn primary" type="button">
-              + Add step
-            </button>
           </div>
     
           <p class="hint">
@@ -492,10 +547,6 @@
         renderEditor();
         renderIngredientsPreview();
       };
-    
-      document
-        .getElementById("addStepButton")
-        .addEventListener("click", addStep);
     
       document
         .getElementById("addStepBottomButton")
@@ -731,10 +782,6 @@
       element.addEventListener("input", () => { object[key] = element.value; afterChange?.(element.value); });
     }
 
-    function setStatus(message, success) {
-      status.textContent = message; status.className = `status ${success ? "ok" : "bad"}`;
-    }
-
     function escapeHtml(value) {
       return String(value ?? "").replace(/[&<>'"]/g, character => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "'":"&#39;", '"':"&quot;" })[character]);
     }
@@ -742,8 +789,6 @@
     state.data = normaliseData(window.RECIPE_BOOK_DATA || state.data);
     state.selectedCategoryId = state.data.categories[0]?.id || null;
     state.selectedRecipeId = state.data.recipes.find(recipe => recipe.categoryId === state.selectedCategoryId)?.id || state.data.recipes[0]?.id || null;
-    setStatus("Recipe data loaded automatically.", true);
-
     renderAll();
   </script>
 </body>

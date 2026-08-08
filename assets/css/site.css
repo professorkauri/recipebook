@@ -49,6 +49,7 @@ input {
 button {
   color: inherit;
 }
+
 .site-header {
   position: sticky;
   top: 0;

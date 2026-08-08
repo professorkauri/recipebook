@@ -255,7 +255,7 @@
     header.innerHTML = `<span class="eyebrow">${escapeHtml(category?.name || "Recipe")}</span><h1 class="recipe-title">${escapeHtml(recipe.name)}</h1><p class="recipe-summary">${escapeHtml(recipe.description || "")}</p>`;
     const meta = document.createElement("div");
     meta.className = "meta-row";
-    [recipe.baseYield, recipe.prepTime && `Prep ${recipe.prepTime}`, recipe.cookTime && `Cook ${recipe.cookTime}`].filter(Boolean).forEach(value => {
+    [recipe.baseYield, recipe.prepTime && `Preheat ${recipe.prepTime}`, recipe.cookTime && `Cook ${recipe.cookTime}`].filter(Boolean).forEach(value => {
       const pill = document.createElement("span"); pill.className = "meta-pill"; pill.textContent = value; meta.appendChild(pill);
     });
     header.appendChild(meta);
