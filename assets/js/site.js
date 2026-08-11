@@ -41,8 +41,22 @@
     return `assets/${slugify(recipe.name)}.${imageType}`;
   }
 
-  function setImageFallback(image) {
-    image.addEventListener("error", () => image.classList.add("is-missing"), { once: true });
+  function setImageFallback(image, recipe) {
+    image.addEventListener("error", () => {
+      const imageType = recipe.imageType || "png";
+      const alternateType = imageType === imageType.toLowerCase()
+        ? imageType.toUpperCase()
+        : imageType.toLowerCase();
+      const alternateImage = `assets/${slugify(recipe.name)}.${alternateType}`;
+
+      if (image.getAttribute("src") !== alternateImage && alternateType !== imageType) {
+        image.addEventListener("error", () => image.classList.add("is-missing"), { once: true });
+        image.src = alternateImage;
+        return;
+      }
+
+      image.classList.add("is-missing");
+    }, { once: true });
   }
 
   function makeRecipeCard(recipe) {
@@ -51,7 +65,7 @@
     const image = card.querySelector(".recipe-image");
     image.src = recipeImage(recipe);
     image.alt = recipe.name;
-    setImageFallback(image);
+    setImageFallback(image, recipe);
     if (recipe.favourite) {
       const badge = document.createElement("span");
       badge.className = "favourite-badge";
@@ -240,7 +254,7 @@
     image.className = "recipe-hero-image";
     image.src = recipeImage(recipe);
     image.alt = recipe.name;
-    setImageFallback(image);
+    setImageFallback(image, recipe);
     imageWrap.appendChild(image);
     if (recipe.favourite) {
       const badge = document.createElement("span");
