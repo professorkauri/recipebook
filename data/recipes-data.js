@@ -2,7 +2,7 @@ window.RECIPE_BOOK_DATA = {
   "settings": {
     "siteTitle": "Our Recipe Book",
     "subtitle": "Favourite recipes for home",
-    "updated": "2026-08-11"
+    "updated": "2026-08-12"
   },
   "categories": [
     {
@@ -1749,6 +1749,125 @@ window.RECIPE_BOOK_DATA = {
           "id": "step-msnya3y5-3pfcf",
           "instruction": "Pour into tin. Use knife to release air, tap if needed.\nBake. ",
           "ingredients": []
+        }
+      ]
+    },
+    {
+      "id": "recipe-mspk88ac-wedra",
+      "name": "New Recipe",
+      "categoryId": "baking",
+      "favourite": false,
+      "imageType": "png",
+      "description": "",
+      "baseYield": "",
+      "prepTime": "",
+      "cookTime": "",
+      "notes": "",
+      "steps": []
+    },
+    {
+      "id": "recipe-mspk89va-6temz",
+      "name": "kimchi Jjigae",
+      "categoryId": "dinner",
+      "favourite": true,
+      "imageType": "png",
+      "description": "to our taste",
+      "baseYield": "",
+      "prepTime": "",
+      "cookTime": "",
+      "notes": "",
+      "steps": [
+        {
+          "id": "step-mspkzh08-tdfel",
+          "instruction": "cook rice. ",
+          "ingredients": []
+        },
+        {
+          "id": "step-mspkcdj2-zc5r4",
+          "instruction": "In a pot heat a splash of sesame oil. \nheat Meat and Kimchi. until tender. ",
+          "ingredients": [
+            {
+              "id": "ingredient-mspkpem4-e5n7r",
+              "quantity": 0,
+              "unit": "",
+              "name": "Rolled meat ",
+              "note": ""
+            },
+            {
+              "id": "ingredient-mspkpkt8-rya0c",
+              "quantity": 300,
+              "unit": "Grams",
+              "name": "Kimchi ",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-mspkqxow-f1qzz",
+          "instruction": "Make sauce. then add to pot with kimchi.",
+          "ingredients": [
+            {
+              "id": "ingredient-mspkr7k0-ssy7u",
+              "quantity": 500,
+              "unit": "mls",
+              "name": "Water",
+              "note": ""
+            },
+            {
+              "id": "ingredient-mspkrdtg-wz00v",
+              "quantity": 1,
+              "unit": "",
+              "name": "Broth cube",
+              "note": "Chicken"
+            },
+            {
+              "id": "ingredient-mspks7sm-mijrc",
+              "quantity": 0.5,
+              "unit": "TBS",
+              "name": "Gochgaru ",
+              "note": "Flakes"
+            },
+            {
+              "id": "ingredient-mspksvlq-qjk1b",
+              "quantity": 1,
+              "unit": "TBS",
+              "name": "Soy Sauce",
+              "note": ""
+            },
+            {
+              "id": "ingredient-mspkt2wz-v1ppk",
+              "quantity": 1,
+              "unit": "TBS",
+              "name": "Brown sugar ",
+              "note": ""
+            }
+          ]
+        },
+        {
+          "id": "step-mspkyl1a-vdw4i",
+          "instruction": "stirring occasionally, \nadd msg ",
+          "ingredients": [
+            {
+              "id": "ingredient-mspkyvss-3hihz",
+              "quantity": 0,
+              "unit": "",
+              "name": "MSG",
+              "note": "sprinkle"
+            }
+          ]
+        },
+        {
+          "id": "step-mspkw8bd-rtm6h",
+          "instruction": "cook for 10mins then add Tofu. ",
+          "ingredients": [
+            {
+              "id": "ingredient-mspkx217-u5mzy",
+              "quantity": 300,
+              "unit": "Grams",
+              "name": "Tofu ",
+              "note": "Firm"
+            }
+          ]
         }
       ]
     }
